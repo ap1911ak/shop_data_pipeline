@@ -1,5 +1,6 @@
 import sqlite3
 from config import config
+from load import create_db, load_table
 from prefect import flow
 from src.extract import extract_table
 from src.transform import *
@@ -23,6 +24,7 @@ def shop_data_pipeline(raw_db_path: str, raw_table_customers: str, raw_table_exc
     df_cleaned_customers = drop_old_data(df_customers)
     df_cleaned_customers = phone_number_formatting(df_cleaned_customers)
     df_cleaned_customers = fill_email_nulls(df_cleaned_customers)
+    conn.close()
 
     print(df_cleaned_customers.head())
 
@@ -34,6 +36,19 @@ def shop_data_pipeline(raw_db_path: str, raw_table_customers: str, raw_table_exc
 
     print(f"\nCleaned Orders:\n{df_cleaned_orders.head()}")
 
+
+    # Load the cleaned data into the clean database
+    clean_conn =create_db(config.Config.cleanDB)
+    load_table(clean_conn, df_cleaned_customers, clean_table_customers)
+    load_table(clean_conn, df_cleaned_orders, clean_table_orders)
+
+    # check the loaded data in the clean database
+    # cursor = clean_conn.cursor()
+    # cursor.execute(f"SELECT * FROM {clean_table_customers} LIMIT 5")
+    # print(f"\nSample data from '{clean_table_customers}':\n{cursor.fetchall()}")
+    # cursor.execute(f"SELECT * FROM {clean_table_orders} LIMIT 5")
+    # print(f"\nSample data from '{clean_table_orders}':\n{cursor.fetchall()}")
+    clean_conn.close()
 
 if __name__ == "__main__":
     
