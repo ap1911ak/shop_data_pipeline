@@ -20,6 +20,12 @@ def shop_data_pipeline(raw_db_path: str, raw_table_customers: str, raw_table_exc
     # print(df_orders.head())
 
     # Transform the data
+    df_cleaned_customers = drop_old_data(df_customers)
+    df_cleaned_customers = phone_number_formatting(df_cleaned_customers)
+    df_cleaned_customers = fill_email_nulls(df_cleaned_customers)
+
+    print(df_cleaned_customers.head())
+
 
 
 if __name__ == "__main__":
