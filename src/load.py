@@ -16,4 +16,4 @@ def load_table(conn: sqlite3.Connection, df: pd.DataFrame, table_name: str):
         df.to_sql(table_name, conn, if_exists='replace', index=False)
         print(f"Data loaded into table '{table_name}' successfully.")
     except Exception as e:
-        print(f"Error occurred while loading data into table '{table_name}': {e}")
+        print(f"Error occurred while loading data into table '{table_name}': {e}")s
