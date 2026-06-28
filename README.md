@@ -60,3 +60,4 @@ This section tracks the data quality and anomalies found during the initial data
 | **Date Format (Customer)** | 0 | ✅ Passed | All customer `signup_date` strings strictly comply with the standard date format. |
 | **Date Format (Order)** | 0 | ✅ Passed | All `order_date` values are well-formatted and parsable. |
 | **In Orders No Customer ** | 2 | ❌ Failed | Found 2 transactions mapped to `customer_id` values that do not exist in the customer database. |
+| **Customer phone not Int** | 8 | ⚠️ Warning | Found 8 phone number contain letters other than numbers.
