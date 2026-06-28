@@ -12,7 +12,7 @@ def drop_old_data(df: pd.DataFrame) -> pd.DataFrame:
 @task(name="Phone Number Formatting", description="Standardize the phone column to remove all non-numeric characters")
 def phone_number_formatting(df: pd.DataFrame) -> pd.DataFrame:
     """Standardize the phone column to remove all non-numeric characters"""
-    df['phone_number'] = df['phone_number'].str.replace(r'\D', '', regex=True)
+    df['phone'] = df['phone'].str.replace(r'\D', '', regex=True)
     return df
 
 @task(name="Fill Email Nulls", description="Replace missing emails with 'unknown@domain.com'")

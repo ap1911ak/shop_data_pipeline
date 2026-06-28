@@ -21,13 +21,13 @@ def test_phone_number_formatting():
     
     mock_data = pd.DataFrame({
         "customer_id": [1, 2, 3],
-        "phone_number": ["0812345678", "0812345678", "+11(083) 456-7890"]
+        "phone": ["0812345678", "0812345678", "+11(083) 456-7890"]
     })
 
     formatted_df = phone_number_formatting(mock_data)
 
     expected_numbers = ["0812345678", "0812345678", "110834567890"]
-    assert formatted_df["phone_number"].tolist() == expected_numbers
+    assert formatted_df["phone"].tolist() == expected_numbers
 
 def test_fill_email_nulls():
     """Replace missing emails with "unknown@domain.com"."""
