@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  data-pipeline:
+    build: .
+    container_name: shop_prefect_pipeline
+    volumes:
+      - ./shopdata.db:/app/shopdata.db

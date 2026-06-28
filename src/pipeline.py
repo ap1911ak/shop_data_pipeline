@@ -1,6 +1,6 @@
 import sqlite3
 from config import config
-from load import create_db, load_table
+from src.load import create_db, load_table
 from prefect import flow, get_run_logger
 from src.extract import extract_table
 from src.transform import *
