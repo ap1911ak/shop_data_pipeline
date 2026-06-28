@@ -1,13 +1,16 @@
 # shop_data_pipeline
 ---------------------
 ## Discription
-This repository manages an automated **ETL (Extract, Transform, Load) Pipeline** designed for an e-commerce platform's data ecosystem. The system ingests unstable, multi-currency transactional data, applies programmatic data cleansing to handle operational anomalies, and transforms it into a clean.
-
+This repository is **ETL Pipeline** designed for an e-commerce platform's data.
 
 
 ## ⛃ Soure
-shopdata.db
-A relational database for order data of ShopData Inc.
+/data/raw/shopdata.db
+
+
+
+## ⛃ Output
+/data/cleaned/analytic.db
 
 
 
@@ -61,3 +64,42 @@ This section tracks the data quality and anomalies found during the initial data
 | **Date Format (Order)** | 0 | ✅ Passed | All `order_date` values are well-formatted and parsable. |
 | **In Orders No Customer ** | 2 | ❌ Failed | Found 2 transactions mapped to `customer_id` values that do not exist in the customer database. |
 | **Customer phone not Int** | 8 | ⚠️ Warning | Found 8 phone number contain letters other than numbers.
+
+#🚀 How to run (Local)
+
+### 1.Git Clone
+  ```bash 
+    git clone git@github.com:ap1911ak/shop_data_pipeline.git
+  ```
+
+### 2.import database file
+```bash
+cp shopdata.db /data/raw/shopdata.db
+```
+  
+### 3.install ilb
+  ```bash 
+  pip install -r requirements.txt
+```
+
+### 4.exicute pipeline
+  ```bash
+  python -m src.pipeline
+```
+
+#🚀 How to run (Docker)
+
+### 1.Git Clone
+  ```bash
+  git clone git@github.com:ap1911ak/shop_data_pipeline.git
+```
+
+### 2.import database file
+  ```bash
+  cp shopdata.db /data/raw/shopdata.db
+```
+
+### 3.bult docker
+  ```bash
+  docker-compose up --build
+```
