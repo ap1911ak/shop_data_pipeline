@@ -36,11 +36,3 @@ def convert_to_usd(df: pd.DataFrame) -> pd.DataFrame:
     df = df.drop(columns=['currency'])
     df = df.drop(columns=['rate_to_usd'])
     return df
-
-mock_data_order = pd.DataFrame({
-        "total_amount": [1000.0, 2000.0, 3000.0],
-        "currency": ["USD", "JPY", "THB"],
-        "rate_to_usd": [1.0, 0.009, 0.03]
-    })
-
-print(convert_to_usd(mock_data_order))
