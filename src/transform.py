@@ -1,15 +1,18 @@
 import pandas as pd
 from prefect import task
 
-@task(name="Drop Duplicates", description="Remove duplicate records from the DataFrame")
-def drop_duplicates(df: pd.DataFrame) -> pd.DataFrame:
-    """Remove duplicate records from the DataFrame"""
-    return df.drop_duplicates()
+@task(name="Drop Old Data", description="Remove old records from the DataFrame")
+def drop_old_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove old records from the DataFrame"""
+    df['signup_date'] = pd.to_datetime(df['signup_date'])
+    df_sorted = df.sort_values(by='signup_date', ascending=True)
+    df_cleaned = df_sorted.drop_duplicates(subset=['customer_id'], keep='last')
+    return df_cleaned
 
 @task(name="Phone Number Formatting", description="Standardize the phone column to remove all non-numeric characters")
 def phone_number_formatting(df: pd.DataFrame) -> pd.DataFrame:
     """Standardize the phone column to remove all non-numeric characters"""
-    df['phone_number'] = df['phone_number'].str.replace(r'\D', '', regex=True)
+    df['phone'] = df['phone'].str.replace(r'\D', '', regex=True)
     return df
 
 @task(name="Fill Email Nulls", description="Replace missing emails with 'unknown@domain.com'")
@@ -35,4 +38,5 @@ def convert_to_usd(df: pd.DataFrame) -> pd.DataFrame:
     df = df.drop(columns=['total_amount'])
     df = df.drop(columns=['currency'])
     df = df.drop(columns=['rate_to_usd'])
+    df = df.drop(columns=['date'])
     return df
