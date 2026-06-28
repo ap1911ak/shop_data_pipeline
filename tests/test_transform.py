@@ -60,7 +60,8 @@ def test_convert_to_usd():
     mock_data_order = pd.DataFrame({
         "total_amount": [1000.0, 2000.0, 3000.0],
         "currency": ["USD", "JPY", "THB"],
-        "rate_to_usd": [1.0, 0.009, 0.03]
+        "rate_to_usd": [1.0, 0.009, 0.03],
+        "date": ["2023-01-01", "2023-01-02", "2023-01-03"]
     })
 
     converted_df = convert_to_usd(mock_data_order)

@@ -38,4 +38,5 @@ def convert_to_usd(df: pd.DataFrame) -> pd.DataFrame:
     df = df.drop(columns=['total_amount'])
     df = df.drop(columns=['currency'])
     df = df.drop(columns=['rate_to_usd'])
+    df = df.drop(columns=['date'])
     return df
