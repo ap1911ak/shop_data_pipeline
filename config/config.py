@@ -1,5 +1,5 @@
 import os
 
 class Config:
-    rawDB = 'data\raw\shopdata.db'
-    cleanDB = 'data\cleaned\shopdata.db'
+    rawDB = os.path.join('data', 'raw', 'shopdata.db')
+    cleanDB = os.path.join('data', 'cleaned', 'shopdata.db')
