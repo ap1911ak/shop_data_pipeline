@@ -26,6 +26,13 @@ def shop_data_pipeline(raw_db_path: str, raw_table_customers: str, raw_table_exc
 
     print(df_cleaned_customers.head())
 
+    df_cleaned_orders = df_orders.merge(df_exchange_rates, on='currency', how='left')
+    print(f"\nCleaned Orders:\n{df_cleaned_orders.head()}")
+    
+    df_cleaned_orders = drop_negative(df_cleaned_orders)
+    df_cleaned_orders = convert_to_usd(df_cleaned_orders)
+
+    print(f"\nCleaned Orders:\n{df_cleaned_orders.head()}")
 
 
 if __name__ == "__main__":
