@@ -1,20 +1,25 @@
 import sqlite3
 from config import config
 from load import create_db, load_table
-from prefect import flow
+from prefect import flow, get_run_logger
 from src.extract import extract_table
 from src.transform import *
 
+
+
 @flow(name="Shop Data Pipeline", log_prints=True)
 def shop_data_pipeline(raw_db_path: str, raw_table_customers: str, raw_table_exchange_rates: str, raw_table_orders: str, clean_table_customers: str, clean_table_orders: str):
+    logger = get_run_logger()
     # Connect to the raw database
     conn = sqlite3.connect(raw_db_path)
-    print(f"Connected to raw database: {raw_db_path}")
+    logger.info(f"Connected to raw database: {raw_db_path}")
+    # print(f"Connected to raw database: {raw_db_path}")
 
     # Extract data from the raw tables
     df_customers = extract_table(conn, raw_table_customers)
     df_exchange_rates = extract_table(conn, raw_table_exchange_rates)
     df_orders = extract_table(conn, raw_table_orders)
+    logger.info("Data extracted from raw tables.")
 
     # print(df_customers.head())
     # print(df_exchange_rates.head())
@@ -24,24 +29,27 @@ def shop_data_pipeline(raw_db_path: str, raw_table_customers: str, raw_table_exc
     df_cleaned_customers = drop_old_data(df_customers)
     df_cleaned_customers = phone_number_formatting(df_cleaned_customers)
     df_cleaned_customers = fill_email_nulls(df_cleaned_customers)
-    conn.close()
-
-    print(df_cleaned_customers.head())
+    logger.info("Got data for customers.")
+    #print(df_cleaned_customers.head())
 
     df_cleaned_orders = df_orders.merge(df_exchange_rates, on='currency', how='left')
-    print(f"\nCleaned Orders:\n{df_cleaned_orders.head()}")
-    
+    logger.info("Data merged for cleaning.")
+    # print(f"\nCleaned Orders:\n{df_cleaned_orders.head()}")
+    conn.close()
+    logger.info("Connection to raw database closed.")
+
+
     df_cleaned_orders = drop_negative(df_cleaned_orders)
     df_cleaned_orders = convert_to_usd(df_cleaned_orders)
-
-    print(f"\nCleaned Orders:\n{df_cleaned_orders.head()}")
+    logger.info("Data cleaning for orders completed.")
+    #print(f"\nCleaned Orders:\n{df_cleaned_orders.head()}")
 
 
     # Load the cleaned data into the clean database
     clean_conn =create_db(config.Config.cleanDB)
     load_table(clean_conn, df_cleaned_customers, clean_table_customers)
     load_table(clean_conn, df_cleaned_orders, clean_table_orders)
-
+    logger.info("Cleaned data loaded into clean database.")
     # check the loaded data in the clean database
     # cursor = clean_conn.cursor()
     # cursor.execute(f"SELECT * FROM {clean_table_customers} LIMIT 5")
@@ -49,6 +57,7 @@ def shop_data_pipeline(raw_db_path: str, raw_table_customers: str, raw_table_exc
     # cursor.execute(f"SELECT * FROM {clean_table_orders} LIMIT 5")
     # print(f"\nSample data from '{clean_table_orders}':\n{cursor.fetchall()}")
     clean_conn.close()
+    logger.info("Connection to clean database closed.")
 
 if __name__ == "__main__":
     
