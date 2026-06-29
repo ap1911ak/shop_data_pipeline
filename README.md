@@ -1,20 +1,13 @@
 # shop_data_pipeline
 ---------------------
-## Discription
-This repository is **ETL Pipeline** designed for an e-commerce platform's data.
+## Description
+This repository is ETL Pipeline designed for an e-commerce platform's data.
 
 
-## ⛃ Soure
-/data/raw/shopdata.db
+## ⛃ Source
+`/data/raw/shopdata.db`
 
-
-
-## ⛃ Output
-/data/cleaned/analytic.db
-
-
-
-## 🏗️ Structure and Meta data
+### 🏗️ Structure and Meta data
 
 ### 1. `raw_customers` Table
 Stores raw profile information of users.
@@ -46,6 +39,34 @@ Raw transactio logs and processing statuses for all orders.
 | `total_amount` | REAL | Total checkout amount in the transaction |
 | `currency` | TEXT | The currency code used by the customer to pay for the order |
 | `status` | TEXT | State of the transaction (e.g., `COMPLTE`, `ERROR`) |
+
+
+
+
+## ⛃ Output
+`/data/cleaned/analytic.db`
+### 🏗️ Structure and Meta data
+### 1. `dim_customers` Table
+Stores good data profile information of users.
+| Table Column Name | Data Type | Description |
+| :--- | :--- | :--- |
+| `customer_id` | INTEGER | Identifier for each customer |
+| `full_name` | TEXT | First and last name of the customer |
+| `email` | TEXT | Email address filled null |
+| `phone` | TEXT | Telephone number that numeric only |
+| `signup_date` | TEXT | Registration timestamp (`YYYY-MM-DD`) |
+
+
+### 2. `fact_orders` Table
+Good data transaction processing statuses for all orders.
+
+| Table Column Name | Data Type | Description |
+| :--- | :--- | :--- |
+| `order_id` | INTEGER | Identifier for each order invoice|
+| `customer_id` | INTEGER | Reference ID linking the customer table|
+| `order_date` | TEXT | Timestamp when the transaction (`YYYY-MM-DD') |
+| `status` | TEXT | State of the transaction (e.g., `COMPLTE`, `ERROR`) |
+| `total_amount_usd` | REAL | Total checkout amount in usd currency |
 
 
 
@@ -99,7 +120,7 @@ cp shopdata.db /data/raw/shopdata.db
   cp shopdata.db /data/raw/shopdata.db
 ```
 
-### 3.bult docker
+### 3.build docker
   ```bash
   docker-compose up --build
 ```
